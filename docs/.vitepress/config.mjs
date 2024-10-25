@@ -4,8 +4,8 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "小兔鲜儿-Web端",
   description: "A VitePress Site",
-  head: [['link', { rel: 'icon', href: '/rabbit-docs/favicon.ico' }]], 
-  base: '/rabbit-docs/', // 使用相对路径，线上部署非根路径时需要修改
+  head: [['link', { rel: 'icon', href: '/rabbit-/favicon.ico' }]], 
+  base: '/rabbit-doc/', // 使用相对路径，线上部署非根路径时需要修改
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
