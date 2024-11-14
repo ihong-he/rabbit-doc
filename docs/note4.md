@@ -1,10 +1,20 @@
 ---
 outline: [1, 3]
 ---
+<script setup>
+import ImageView from './components/ImageView.vue'
+import { ref } from 'vue'
 
-# 静态结构搭建和路由配置
+const imgArr = ref(['note4-1.png', 'note4-2.png'])
 
-## 1. 准备分类组件
+</script>
+# 一级分类页
+
+## 整体认识和页面渲染
+
+<ImageView :imgArr="imgArr" :index="0" />
+
+### 1. 准备分类组件
 
 ```vue
 <script setup></script>
@@ -14,12 +24,10 @@ outline: [1, 3]
 </template>
 ```
 
-## 2. 配置路由
+### 2. 配置路由
 
-```javascript
+```javascript{12-14}
 import { createRouter, createWebHashHistory } from "vue-router";
-import Layout from "@/views/Layout/index.vue";
-import Home from "@/views/Home/index.vue";
 import Category from "@/views/Category/index.vue";
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -30,21 +38,11 @@ const router = createRouter({
       component: Layout,
       children: [
         {
-          path: "",
-          name: "home",
-          component: Home,
-        },
-        {
           path: "category/:id",
           name: "category",
           component: Category,
         },
       ],
-    },
-    {
-      path: "/login",
-      name: "login",
-      component: Login,
     },
   ],
 });
@@ -52,19 +50,20 @@ const router = createRouter({
 export default router;
 ```
 
-## 3. 配置导航区域链接
+### 3. 配置导航区域链接
 
 ```html
 <li v-for="item in categoryStore.categoryList" :key="item.id">
-  <RouterLink active-class="active" :to="`/category/${item.id}`">
+  <RouterLink active-class="active" to="/"> // [!code --]
+  <RouterLink active-class="active" :to="`/category/${item.id}`"> // [!code ++]
     {{ item.name }}
   </RouterLink>
 </li>
 ```
 
-# 面包屑导航渲染
+## 面包屑导航渲染
 
-## 1. 认识组件准备模版
+### 1. 认识组件准备模版
 
 ```vue
 <script setup></script>
@@ -84,86 +83,11 @@ export default router;
 </template>
 
 <style scoped lang="scss">
-.top-category {
-  h3 {
-    font-size: 28px;
-    color: #666;
-    font-weight: normal;
-    text-align: center;
-    line-height: 100px;
-  }
-
-  .sub-list {
-    margin-top: 20px;
-    background-color: #fff;
-
-    ul {
-      display: flex;
-      padding: 0 32px;
-      flex-wrap: wrap;
-
-      li {
-        width: 168px;
-        height: 160px;
-
-        a {
-          text-align: center;
-          display: block;
-          font-size: 16px;
-
-          img {
-            width: 100px;
-            height: 100px;
-          }
-
-          p {
-            line-height: 40px;
-          }
-
-          &:hover {
-            color: $xtxColor;
-          }
-        }
-      }
-    }
-  }
-
-  .ref-goods {
-    background-color: #fff;
-    margin-top: 20px;
-    position: relative;
-
-    .head {
-      .xtx-more {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-      }
-
-      .tag {
-        text-align: center;
-        color: #999;
-        font-size: 20px;
-        position: relative;
-        top: -20px;
-      }
-    }
-
-    .body {
-      display: flex;
-      justify-content: space-around;
-      padding: 0 40px 30px;
-    }
-  }
-
-  .bread-container {
-    padding: 25px 0;
-  }
-}
+...
 </style>
 ```
 
-## 2. 封装接口
+### 2. 封装接口
 
 ```javascript
 import request from "@/utils/request";
@@ -183,7 +107,7 @@ export const getTopCategoryAPI = (id) => {
 };
 ```
 
-## 3. 渲染面包屑导航
+### 3. 渲染面包屑导航
 
 ```vue
 <script setup>
@@ -208,11 +132,17 @@ getCategory(route.params.id);
 </template>
 ```
 
-# 分类 Banner 渲染
+## 分类 Banner 渲染
 
-## 1. 适配接口
+### 1. 封装接口
 
 ```javascript
+/**
+ * 获取首页轮播图数据的API函数
+ * @param {Object} params - 请求参数对象
+ * @param {string} [params.distributionSite="1"] - 标识，默认值为"1"，商品站点为"2"
+ * @returns {Promise} 返回一个Promise对象，包含请求结果
+ */
 export function getBannerAPI(params = {}) {
   // 默认为1 商品为2
   const { distributionSite = "1" } = params;
@@ -225,7 +155,7 @@ export function getBannerAPI(params = {}) {
 }
 ```
 
-## 2. 迁移首页 Banner 逻辑
+### 2. 迁移首页 Banner 逻辑
 
 ```vue
 <script setup>
@@ -282,9 +212,9 @@ onMounted(() => getBanner());
 </style>
 ```
 
-# 导航激活&分类列表渲染
+## 导航激活&分类列表渲染
 
-## 1. 导航激活状态设置
+### 1. 导航激活状态设置
 
 ```vue
 <RouterLink
@@ -293,7 +223,7 @@ onMounted(() => getBanner());
 >{{ item.name }}</RouterLink>
 ```
 
-## 2. 分类数据模版
+### 2. 分类数据模版
 
 ```html
 <div class="sub-list">
@@ -317,7 +247,7 @@ onMounted(() => getBanner());
 </div>
 ```
 
-# 路由缓存问题解决
+## 路由缓存问题解决
 
 > 缓存问题：当路由 path 一样，参数不同的时候会选择直接复用路由对应的组件，参考[带参数的动态路由匹配](https://router.vuejs.org/zh/guide/essentials/dynamic-matching.html)
 
@@ -332,8 +262,8 @@ onMounted(() => getBanner());
   <LayoutNav />
   <LayoutHeader />
    <!-- 添加key，破坏路由缓存机制 -->
-  <RouterView :key="$route.fullPath"/>
-  <RouterView />
+  <RouterView /> // [!code --]
+  <RouterView :key="$route.fullPath"/> // [!code ++]
   <LayoutFooter />
 </template>
 
@@ -344,7 +274,7 @@ onMounted(() => getBanner());
 ```vue
 <script setup>
 import { onBeforeRouteUpdate } from "vue-router";
-// 但路由发生变化时调用
+// 在路由发生变化时调用
 onBeforeRouteUpdate((to) => {
   // 发起数据请求
   getCategory(to.params.id);
@@ -352,11 +282,11 @@ onBeforeRouteUpdate((to) => {
 </script>
 ```
 
-# 基于业务逻辑的函数拆分
+## 基于业务逻辑的函数拆分
 
 > 基本思想：把组件内独立的业务逻辑通过 `useXXX` 函数做封装处理，在组件中做组合使用
 
-![image.png](/note/note4-1.png)
+<ImageView :imgArr="imgArr" :index="1" />
 
 - 分类逻辑
 

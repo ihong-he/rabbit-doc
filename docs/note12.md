@@ -1,11 +1,20 @@
 ---
 outline: [1, 3]
 ---
-# Sku组件封装
+<script setup>
+import ImageView from './components/ImageView.vue'
+import { ref } from 'vue'
+
+const imgArr = ref(['note12-1.png', 'note11-2.png'])
+
+</script>
+# Sku组件
+
 ## 1. 准备模版渲染规格数据
 > 使用Vite快速创建一个Vue项目，在项目中添加请求插件axios，然后新增一个SKU组件，在根组件中把它渲染出来，下面是规格内容的基础模板
 
-![image.png](/note/note12-1.png)
+<ImageView :imgArr="imgArr" :index="0" />
+
 ```vue
 <script setup>
 import { onMounted, ref } from 'vue'

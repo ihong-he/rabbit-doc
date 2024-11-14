@@ -1,9 +1,19 @@
 ---
 outline: [1, 3]
 ---
-# 路由配置
-![image.png](/note/note11-1.png)
-## 1. 准备路由模版
+<script setup>
+import ImageView from './components/ImageView.vue'
+import { ref } from 'vue'
+
+const imgArr = ref(['note11-1.png', 'note11-2.png', 'note11-3.png', 'note11-4.png'])
+
+</script>
+# 个人中心
+
+## 整体认识和页面渲染
+<ImageView :imgArr="imgArr" :index="0" />
+
+### 1. 准备路由模版
 ```vue
 <script setup> </script>
 
@@ -29,75 +39,11 @@ outline: [1, 3]
 </template>
 
 <style scoped lang="scss">
-.container {
-  display: flex;
-  padding-top: 20px;
-
-  .xtx-member-aside {
-    width: 220px;
-    margin-right: 20px;
-    border-radius: 2px;
-    background-color: #fff;
-
-    .user-manage {
-      background-color: #fff;
-
-      h4 {
-        font-size: 18px;
-        font-weight: 400;
-        padding: 20px 52px 5px;
-        border-top: 1px solid #f6f6f6;
-      }
-
-      .links {
-        padding: 0 52px 10px;
-      }
-
-      a {
-        display: block;
-        line-height: 1;
-        padding: 15px 0;
-        font-size: 14px;
-        color: #666;
-        position: relative;
-
-        &:hover {
-          color: $xtxColor;
-        }
-
-        &.active,
-        &.router-link-exact-active {
-          color: $xtxColor;
-
-          &:before {
-            display: block;
-          }
-        }
-
-        &:before {
-          content: '';
-          display: none;
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          position: absolute;
-          top: 19px;
-          left: -16px;
-          background-color: $xtxColor;
-        }
-      }
-    }
-  }
-
-  .article {
-    width: 1000px;
-    background-color: #fff;
-  }
-}
+...
 </style>
 ```
 
-## 2. 配置路由
+### 2. 配置路由
 ```javascript
 import Member from '@/views/Member/index.vue'
 
@@ -107,7 +53,9 @@ import Member from '@/views/Member/index.vue'
     component: Member,
 }
 ```
-## 3. 准备个人信息和我的订单路由组件
+### 3. 个人信息和我的订单组件
+
+- 个人信息
 ```vue
 <script setup>
 const userStore = {}
@@ -150,98 +98,11 @@ const userStore = {}
 </template>
 
 <style scoped lang="scss">
-.home-overview {
-  height: 132px;
-  background: url(@/assets/images/center-bg.png) no-repeat center / cover;
-  display: flex;
-
-  .user-meta {
-    flex: 1;
-    display: flex;
-    align-items: center;
-
-    .avatar {
-      width: 85px;
-      height: 85px;
-      border-radius: 50%;
-      overflow: hidden;
-      margin-left: 60px;
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-    h4 {
-      padding-left: 26px;
-      font-size: 18px;
-      font-weight: normal;
-      color: white;
-    }
-  }
-
-  .item {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-
-    &:first-child {
-      border-right: 1px solid #f4f4f4;
-    }
-
-    a {
-      color: white;
-      font-size: 16px;
-      text-align: center;
-
-      .iconfont {
-        font-size: 32px;
-      }
-
-      p {
-        line-height: 32px;
-      }
-    }
-  }
-}
-
-.like-container {
-  margin-top: 20px;
-  border-radius: 4px;
-  background-color: #fff;
-}
-
-.home-panel {
-  background-color: #fff;
-  padding: 0 20px;
-  margin-top: 20px;
-  height: 400px;
-
-  .header {
-    height: 66px;
-    border-bottom: 1px solid #f5f5f5;
-    padding: 18px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-
-    h4 {
-      font-size: 22px;
-      font-weight: 400;
-    }
-
-  }
-
-  .goods-list {
-    display: flex;
-    justify-content: space-around;
-  }
-}
+...
 </style>
 ```
 
+- 我的订单
 ```vue
 <script setup>
 // tab列表
@@ -350,168 +211,10 @@ const orderList = []
 </template>
 
 <style scoped lang="scss">
-.order-container {
-  padding: 10px 20px;
-
-  .pagination-container {
-    display: flex;
-    justify-content: center;
-  }
-
-  .main-container {
-    min-height: 500px;
-
-    .holder-container {
-      min-height: 500px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-  }
-}
-
-.order-item {
-  margin-bottom: 20px;
-  border: 1px solid #f5f5f5;
-
-  .head {
-    height: 50px;
-    line-height: 50px;
-    background: #f5f5f5;
-    padding: 0 20px;
-    overflow: hidden;
-
-    span {
-      margin-right: 20px;
-
-      &.down-time {
-        margin-right: 0;
-        float: right;
-
-        i {
-          vertical-align: middle;
-          margin-right: 3px;
-        }
-
-        b {
-          vertical-align: middle;
-          font-weight: normal;
-        }
-      }
-    }
-
-    .del {
-      margin-right: 0;
-      float: right;
-      color: #999;
-    }
-  }
-
-  .body {
-    display: flex;
-    align-items: stretch;
-
-    .column {
-      border-left: 1px solid #f5f5f5;
-      text-align: center;
-      padding: 20px;
-
-      >p {
-        padding-top: 10px;
-      }
-
-      &:first-child {
-        border-left: none;
-      }
-
-      &.goods {
-        flex: 1;
-        padding: 0;
-        align-self: center;
-
-        ul {
-          li {
-            border-bottom: 1px solid #f5f5f5;
-            padding: 10px;
-            display: flex;
-
-            &:last-child {
-              border-bottom: none;
-            }
-
-            .image {
-              width: 70px;
-              height: 70px;
-              border: 1px solid #f5f5f5;
-            }
-
-            .info {
-              width: 220px;
-              text-align: left;
-              padding: 0 10px;
-
-              p {
-                margin-bottom: 5px;
-
-                &.name {
-                  height: 38px;
-                }
-
-                &.attr {
-                  color: #999;
-                  font-size: 12px;
-
-                  span {
-                    margin-right: 5px;
-                  }
-                }
-              }
-            }
-
-            .price {
-              width: 100px;
-            }
-
-            .count {
-              width: 80px;
-            }
-          }
-        }
-      }
-
-      &.state {
-        width: 120px;
-
-        .green {
-          color: $xtxColor;
-        }
-      }
-
-      &.amount {
-        width: 200px;
-
-        .red {
-          color: $priceColor;
-        }
-      }
-
-      &.action {
-        width: 140px;
-
-        a {
-          display: block;
-
-          &:hover {
-            color: $xtxColor;
-          }
-        }
-      }
-    }
-  }
-}
+...
 </style>
 ```
-## 4. 配置三级路由
+### 4. 配置三级路由
 ```javascript
 import MemberInfo from '@/views/Member/components/UserInfo.vue'
 import MemberOrder from '@/views/Member/components/UserOrder.vue'
@@ -533,8 +236,8 @@ import MemberOrder from '@/views/Member/components/UserOrder.vue'
 }
 ```
 
-# 个人中心信息渲染
-## 1. 使用Pinia数据渲染个人信息
+## 个人中心信息渲染
+### 1. 使用Pinia数据渲染个人信息
 ```vue
 <script setup>
 // 导入userStore
@@ -552,7 +255,7 @@ const userStore = useUserStore()
   </div>
 </template>
 ```
-## 2. 封装猜你喜欢接口
+### 2. 封装猜你喜欢接口
 ```javascript
 export const getLikeListAPI = ({ limit = 4 }) => {
   return request({
@@ -563,7 +266,7 @@ export const getLikeListAPI = ({ limit = 4 }) => {
   })
 }
 ```
-## 3. 渲染猜你喜欢数据
+### 3. 渲染猜你喜欢数据
 ```vue
 <script setup>
 import { onMounted, ref } from 'vue'
@@ -585,8 +288,13 @@ onMounted(() => getLikeList())
     </div>
 </template>
 ```
-# 我的订单
-## 1. 基础列表渲染
+## 我的订单
+<ImageView :imgArr="imgArr" :index="1" />
+
+### 1. 基础列表渲染
+
+- 封装获取订单列表的接口
+
 ```javascript
 /*
 params: {
@@ -605,6 +313,7 @@ export const getUserOrder = (params) => {
   })
 }
 ```
+- 列表渲染
 ```vue
 <script setup>
 import { getUserOrder } from '@/apis/order'
@@ -613,9 +322,9 @@ import { onMounted, ref } from 'vue'
 // 获取订单列表
 const orderList = ref([])
 const params = ref({
-  orderState: 0,
-  page: 1,
-  pageSize: 2
+  orderState: 0, // 订单状态
+  page: 1, // 当前页码
+  pageSize: 2 // 每页条数
 })
 const getOrderList = async () => {
   const res = await getUserOrder(params.value)
@@ -625,7 +334,7 @@ const getOrderList = async () => {
 onMounted(() => getOrderList())
 </script>
 ```
-## 2. tab切换实现
+### 2. tab切换实现
 ```vue
 <script setup>
 // tab列表
@@ -653,7 +362,7 @@ const tabChange = (type) => {
   </el-tabs>
 </template>
 ```
-## 3. 分页逻实现
+### 3. 分页逻辑实现
 > 页数 = 总条数 / 每页条数
 
 ```vue
@@ -662,13 +371,13 @@ const tabChange = (type) => {
 const total = ref(0)
 const getOrderList = async () => {
   const res = await getUserOrder(params.value)
-  // 存入总条数
+  // 设置总条数
   total.value = res.result.counts
 }
 // 页数切换
 const pageChange = (page) => {
-  params.value.page = page
-  getOrderList()
+  params.value.page = page // 修改页码
+  getOrderList() // 重新获取列表数据
 }
 </script>
 
@@ -682,28 +391,40 @@ const pageChange = (page) => {
 </template>
 ```
 
-# 细节优化
-## 1. 默认三级路由设置
+## 细节优化
+### 1. 默认三级路由设置
+- 方法一：置空第一个子路由path
 ```javascript
-  {
-    path: 'member',
-    component: Member,
-    children: [
-      {
-        path: '', // 置空path
-        component: UserInfo
-      },
-      {
-        path: 'order',
-        component: UserOrder
-      }
-    ]
-  }
+{
+  path: 'member',
+  component: Member,
+  children: [
+    {
+      path: '', // 置空path
+      component: UserInfo
+    },
+    {
+      path: 'order',
+      component: UserOrder
+    }
+  ]
+}
 ```
-## 2. 订单状态显示适配
+- 方法二：跳转第一个子路由
+```js
+// 个人中心路由
+{
+  path: '/member',
+  name: 'Member',
+  redirect: '/member/user', // 跳转第一个子路由
+  component: Member,
+  children: []
+}
+```
+### 2. 订单状态显示适配
 ```vue
 <script setup>
-  // 创建格式化函数
+  // 配置订单状态
   const fomartPayState = (payState) => {
     const stateMap = {
       1: '待付款',
@@ -719,7 +440,7 @@ const pageChange = (page) => {
 
 
 <template>
-  <!-- 调用函数适配显示 -->
+  <!-- 订单状态 -->
   <p>{{ fomartPayState(order.orderState)}}</p>
 </template>
 ```

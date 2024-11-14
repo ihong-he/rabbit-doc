@@ -4,7 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "小兔鲜儿-Web端",
   description: "A VitePress Site",
-  head: [['link', { rel: 'icon', href: '/rabbit-/favicon.ico' }]], 
+  head: [['link', { rel: 'icon', href: '/rabbit-doc/favicon.ico' }]], 
   base: '/rabbit-doc/', // 使用相对路径，线上部署非根路径时需要修改
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
@@ -32,9 +32,9 @@ export default defineConfig({
           { text: '购物车页', link: '/note8' },
           { text: '订单页', link: '/note9' },
           { text: '支付页', link: '/note10' },
-          { text: '会员中心页', link: '/note11' },
-          { text: '扩展页', link: '/note12' },
-          { text: 'Vue Examples', link: '/vue-examples' },
+          { text: '个人中心页', link: '/note11' },
+          { text: 'Sku组件', link: '/note12' },
+          { text: 'Examples', link: '/vue-examples' },
         ]
       }
     ],

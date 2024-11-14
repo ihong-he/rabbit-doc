@@ -1,9 +1,22 @@
 ---
 outline: [1, 3]
 ---
-# 静态结构搭建和分类实现
-## 1. 整体结构搭建
-![image.png](/note/note3-1.png)
+<script setup>
+import ImageView from './components/ImageView.vue'
+import { ref } from 'vue'
+
+const imgArr = ref(['note3-1.png', 'note3-2.png', 'note3-3.png'])
+
+</script>
+# Home页
+
+## 整体认识和页面渲染
+
+<ImageView :imgArr="imgArr" :index="0" />
+
+### 1. 整体结构搭建
+
+<ImageView :imgArr="imgArr" :index="1" />
 
 1- 按照结构新增五个组件，准备最简单的模版，分别在Home模块的入口组件中引入
 
@@ -41,7 +54,7 @@ import homeProduct from './components/HomeProduct.vue'
   <homeProduct />
 </template>
 ```
-## 2. 左侧分类
+### 2. 左侧分类
 
 - 代码实现
 
@@ -82,9 +95,9 @@ const categoryStore = useCategoryStore()
   </div>
 </template>
 ```
-# banner轮播图实现
+## banner轮播图实现
 
-## 1. 封装接口
+### 1. 封装接口
 ```javascript
 /**
  * @description: 获取banner图
@@ -93,19 +106,19 @@ const categoryStore = useCategoryStore()
  */
 import  httpInstance  from '@/utils/http'
 function getBannerAPI (){
-  return request({
+  return httpInstance({
     url:'home/banner'
   })
 }
 ```
-## 2. 获取数据并渲染
+### 2. 获取数据并渲染
 ```vue
 <script setup>
 import { getBannerAPI } from '@/apis/home'
 import { onMounted, ref } from 'vue'
 
 const bannerList = ref([])
-
+// 获取banner数据
 const getBanner = async () => {
   const res = await getBannerAPI()
   console.log(res)
@@ -129,12 +142,12 @@ onMounted(() => getBanner())
 </template>
 
 ```
-# 面板组件封装
+## 面板组件封装
 
-## 1. 代码实现
+### 1. 代码实现
 ```vue
 <script setup>
-
+// 接收父组件传递的参数
 defineProps({
   title: {
     type: String,
@@ -147,7 +160,6 @@ defineProps({
 })
 
 </script>
-
 
 <template>
   <div class="home-panel">
@@ -164,37 +176,13 @@ defineProps({
   </div>
 </template>
 
-
 <style scoped lang='scss'>
-.home-panel {
-  background-color: #fff;
-
-  .head {
-    padding: 40px 0;
-    display: flex;
-    align-items: flex-end;
-
-    h3 {
-      flex: 1;
-      font-size: 32px;
-      font-weight: normal;
-      margin-left: 6px;
-      height: 35px;
-      line-height: 35px;
-
-      small {
-        font-size: 16px;
-        color: #999;
-        margin-left: 20px;
-      }
-    }
-  }
-}
+...
 </style>
 ```
-# 新鲜好物实现
+## 新鲜好物实现
 
-## 1. 封装接口
+### 1. 封装接口
 ```javascript
 /**
  * @description: 获取新鲜好物
@@ -208,7 +196,7 @@ export const findNewAPI = () => {
 }
 ```
 
-## 2. 获取数据并渲染 
+### 2. 获取数据并渲染 
 ```vue
 <script setup>
 import HomePanel from './HomePanel.vue'
@@ -239,27 +227,30 @@ getNewList()
   </HomePanel>
 </template>
 ```
-# 人气推荐实现
+## 人气推荐实现
 
-同上，省略
+同上
 
-# 懒加载指令实现
+## 懒加载指令实现
 
-![image](/note/note3-2.png)
+<ImageView :imgArr="imgArr" :index="2" />
 
-## 1. 封装全局指令
+### 1. 封装全局指令
 ```javascript
+// @/directives/index.js
 // 定义懒加载插件
 import { useIntersectionObserver } from '@vueuse/core'
 
 export const lazyPlugin = {
+  // 全局指令的配置对象
   install (app) {
-    // 懒加载指令逻辑
+    // 自定义指令逻辑
     app.directive('img-lazy', {
       mounted (el, binding) {
         // el: 指令绑定的那个元素 img
-        // binding: binding.value  指令等于号后面绑定的表达式的值  图片url
+        // binding: binding.value  需要绑定的表达式的值  图片url
         console.log(el, binding.value)
+        // 懒加载指令逻辑
         const { stop } = useIntersectionObserver(
           el,
           ([{ isIntersecting }]) => {
@@ -277,15 +268,15 @@ export const lazyPlugin = {
   }
 }
 ```
-## 2. 注册全局指令
+### 2. 注册全局指令
 ```javascript
 // 全局指令注册
 import { directivePlugin } from '@/directives'
 app.use(directivePlugin)
 ```
 
-# Product产品列表实现
-## 1. 基础数据渲染
+## Product产品列表实现
+### 1. 基础数据渲染
 1- 准备静态模版
 ```vue
 <script setup>
@@ -320,129 +311,7 @@ import HomePanel from './HomePanel.vue'
 </template>
 
 <style scoped lang='scss'>
-.home-product {
-  background: #fff;
-  margin-top: 20px;
-  .sub {
-    margin-bottom: 2px;
-
-    a {
-      padding: 2px 12px;
-      font-size: 16px;
-      border-radius: 4px;
-
-      &:hover {
-        background: $xtxColor;
-        color: #fff;
-      }
-
-      &:last-child {
-        margin-right: 80px;
-      }
-    }
-  }
-
-  .box {
-    display: flex;
-
-    .cover {
-      width: 240px;
-      height: 610px;
-      margin-right: 10px;
-      position: relative;
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
-
-      .label {
-        width: 188px;
-        height: 66px;
-        display: flex;
-        font-size: 18px;
-        color: #fff;
-        line-height: 66px;
-        font-weight: normal;
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translate3d(0, -50%, 0);
-
-        span {
-          text-align: center;
-
-          &:first-child {
-            width: 76px;
-            background: rgba(0, 0, 0, 0.9);
-          }
-
-          &:last-child {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.7);
-          }
-        }
-      }
-    }
-
-    .goods-list {
-      width: 990px;
-      display: flex;
-      flex-wrap: wrap;
-
-      li {
-        width: 240px;
-        height: 300px;
-        margin-right: 10px;
-        margin-bottom: 10px;
-
-        &:nth-last-child(-n + 4) {
-          margin-bottom: 0;
-        }
-
-        &:nth-child(4n) {
-          margin-right: 0;
-        }
-      }
-    }
-
-    .goods-item {
-      display: block;
-      width: 220px;
-      padding: 20px 30px;
-      text-align: center;
-      transition: all .5s;
-
-      &:hover {
-        transform: translate3d(0, -3px, 0);
-        box-shadow: 0 3px 8px rgb(0 0 0 / 20%);
-      }
-
-      img {
-        width: 160px;
-        height: 160px;
-      }
-
-      p {
-        padding-top: 10px;
-      }
-
-      .name {
-        font-size: 16px;
-      }
-
-      .desc {
-        color: #999;
-        height: 29px;
-      }
-
-      .price {
-        color: $priceColor;
-        font-size: 20px;
-      }
-    }
-  }
-}
+...
 </style>
 ```
 2- 封装接口
@@ -498,8 +367,8 @@ onMounted( ()=> getGoods() )
   </div>
 </template>
 ```
-## 2. 图片懒加载
-```html
+### 2. 图片懒加载
+```html{6}
 <div class="home-product">
   <HomePanel :title="cate.name" v-for="cate in goodsProduct" :key="cate.id">
     <div class="box">
@@ -519,8 +388,8 @@ onMounted( ()=> getGoods() )
   </HomePanel>
 </div>
 ```
-# GoodsItem组件封装
-## 1. 封装组件
+## GoodsItem组件封装
+### 1. 封装组件
 ```vue
 
 <script setup>
@@ -551,37 +420,15 @@ defineProps({
   transition: all .5s;
 
   &:hover {
-    transform: translate3d(0, -3px, 0);
-    box-shadow: 0 3px 8px rgb(0 0 0 / 20%);
+    transform: translate3d(0, -3px, 0); // 3D效果
+    box-shadow: 0 3px 8px rgb(0 0 0 / 20%); // 阴影
   }
-
-  img {
-    width: 160px;
-    height: 160px;
-  }
-
-  p {
-    padding-top: 10px;
-  }
-
-  .name {
-    font-size: 16px;
-  }
-
-  .desc {
-    color: #999;
-    height: 29px;
-  }
-
-  .price {
-    color: $priceColor;
-    font-size: 20px;
-  }
+  ...
 }
 </style>
 ```
-## 2. 使用组件
-```vue
+### 2. 使用组件
+```html
 <ul class="goods-list">
   <li v-for="goods in cate.goods" :key="item.id">
     <GoodsItem :goods="goods" />

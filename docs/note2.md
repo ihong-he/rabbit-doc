@@ -1,13 +1,20 @@
 ---
 outline: [1, 3]
 ---
-# Layout页面搭建
+<script setup>
+import ImageView from './components/ImageView.vue'
+import { ref } from 'vue'
 
-- Layout结构图
+const imgArr = ref([ 'note2-2.png', 'note2-1.png'])
 
-![image.png](/note/note2-2.png)
+</script>
+# Layout布局
 
-## Nav部分
+## Layout页面搭建
+
+<ImageView :imgArr="imgArr" :index="0" />
+
+### 1. Nav部分
 
 ```vue
 <script setup>
@@ -28,7 +35,7 @@ outline: [1, 3]
             </el-popconfirm>
           </li>
           <li><a href="javascript:;">我的订单</a></li>
-          <li><a href="javascript:;">会员中心</a></li>
+          <li><a href="javascript:;">会员中心(个人中心)</a></li>
         </template>
         <template v-else>
           <li><a href="javascript:;">请先登录</a></li>
@@ -62,6 +69,7 @@ outline: [1, 3]
         }
 
         &:hover {
+          // 使用sass颜色变量
           color: $xtxColor;
         }
       }
@@ -77,7 +85,7 @@ outline: [1, 3]
 </style>
 ```
 
-## Header部分
+### 2. Header部分
 
 ```vue
 <script setup>
@@ -110,110 +118,11 @@ outline: [1, 3]
 
 
 <style scoped lang='scss'>
-.app-header {
-  background: #fff;
-
-  .container {
-    display: flex;
-    align-items: center;
-  }
-
-  .logo {
-    width: 200px;
-
-    a {
-      display: block;
-      height: 132px;
-      width: 100%;
-      text-indent: -9999px;
-      background: url('@/assets/images/logo.png') no-repeat center 18px / contain;
-    }
-  }
-
-  .app-header-nav {
-    width: 820px;
-    display: flex;
-    padding-left: 40px;
-    position: relative;
-    z-index: 998;
-  
-    li {
-      margin-right: 40px;
-      width: 38px;
-      text-align: center;
-  
-      a {
-        font-size: 16px;
-        line-height: 32px;
-        height: 32px;
-        display: inline-block;
-  
-        &:hover {
-          color: $xtxColor;
-          border-bottom: 1px solid $xtxColor;
-        }
-      }
-  
-      .active {
-        color: $xtxColor;
-        border-bottom: 1px solid $xtxColor;
-      }
-    }
-  }
-
-  .search {
-    width: 170px;
-    height: 32px;
-    position: relative;
-    border-bottom: 1px solid #e7e7e7;
-    line-height: 32px;
-
-    .icon-search {
-      font-size: 18px;
-      margin-left: 5px;
-    }
-
-    input {
-      width: 140px;
-      padding-left: 5px;
-      color: #666;
-    }
-  }
-
-  .cart {
-    width: 50px;
-
-    .curr {
-      height: 32px;
-      line-height: 32px;
-      text-align: center;
-      position: relative;
-      display: block;
-
-      .icon-cart {
-        font-size: 22px;
-      }
-
-      em {
-        font-style: normal;
-        position: absolute;
-        right: 0;
-        top: 0;
-        padding: 1px 6px;
-        line-height: 1;
-        background: $helpColor;
-        color: #fff;
-        font-size: 12px;
-        border-radius: 10px;
-        font-family: Arial;
-      }
-    }
-  }
-}
+...
 </style>
 ```
 
-## Footer部分
+### 3. Footer部分
 ```vue
 <template>
   <footer class="app_footer">
@@ -281,171 +190,11 @@ outline: [1, 3]
 </template>
 
 <style scoped lang='scss'>
-.app_footer {
-  overflow: hidden;
-  background-color: #f5f5f5;
-  padding-top: 20px;
-
-  .contact {
-    background: #fff;
-
-    .container {
-      padding: 60px 0 40px 25px;
-      display: flex;
-    }
-
-    dl {
-      height: 190px;
-      text-align: center;
-      padding: 0 72px;
-      border-right: 1px solid #f2f2f2;
-      color: #999;
-
-      &:first-child {
-        padding-left: 0;
-      }
-
-      &:last-child {
-        border-right: none;
-        padding-right: 0;
-      }
-    }
-
-    dt {
-      line-height: 1;
-      font-size: 18px;
-    }
-
-    dd {
-      margin: 36px 12px 0 0;
-      float: left;
-      width: 92px;
-      height: 92px;
-      padding-top: 10px;
-      border: 1px solid #ededed;
-
-      .iconfont {
-        font-size: 36px;
-        display: block;
-        color: #666;
-      }
-
-      &:hover {
-        .iconfont {
-          color: $xtxColor;
-        }
-      }
-
-      &:last-child {
-        margin-right: 0;
-      }
-    }
-
-    .qrcode {
-      width: 92px;
-      height: 92px;
-      padding: 7px;
-      border: 1px solid #ededed;
-    }
-
-    .download {
-      padding-top: 5px;
-      font-size: 14px;
-      width: auto;
-      height: auto;
-      border: none;
-
-      span {
-        display: block;
-      }
-
-      a {
-        display: block;
-        line-height: 1;
-        padding: 10px 25px;
-        margin-top: 5px;
-        color: #fff;
-        border-radius: 2px;
-        background-color: $xtxColor;
-      }
-    }
-
-    .hotline {
-      padding-top: 20px;
-      font-size: 22px;
-      color: #666;
-      width: auto;
-      height: auto;
-      border: none;
-
-      small {
-        display: block;
-        font-size: 15px;
-        color: #999;
-      }
-    }
-  }
-
-  .extra {
-    background-color: #333;
-  }
-
-  .slogan {
-    height: 178px;
-    line-height: 58px;
-    padding: 60px 100px;
-    border-bottom: 1px solid #434343;
-    display: flex;
-    justify-content: space-between;
-
-    a {
-      height: 58px;
-      line-height: 58px;
-      color: #fff;
-      font-size: 28px;
-
-      i {
-        font-size: 50px;
-        vertical-align: middle;
-        margin-right: 10px;
-        font-weight: 100;
-      }
-
-      span {
-        vertical-align: middle;
-        text-shadow: 0 0 1px #333;
-      }
-    }
-  }
-
-  .copyright {
-    height: 170px;
-    padding-top: 40px;
-    text-align: center;
-    color: #999;
-    font-size: 15px;
-
-    p {
-      line-height: 1;
-      margin-bottom: 20px;
-    }
-
-    a {
-      color: #999;
-      line-height: 1;
-      padding: 0 10px;
-      border-right: 1px solid #999;
-
-      &:last-child {
-        border-right: none;
-      }
-    }
-  }
-}
+...
 </style>
 ```
 
-## Layout整体
+### 4. Layout整体
 ```vue
 <script setup>
 import LayoutNav from './components/LayoutNav.vue'
@@ -456,34 +205,39 @@ import LayoutFooter from './components/LayoutFooter.vue'
 <template>
   <LayoutNav />
   <LayoutHeader />
+  <!-- 二级路由入口-主体内容区域 -->
   <RouterView />
   <LayoutFooter />
 </template>
 ```
 
-# 字体图标渲染
+## 字体图标渲染
 > 字体图标采用的是阿里的字体图标库，样式文件已经准备好，在 `index.html`文件中引入即可
 
 ```html
+  <!-- 引入iconfont -->
   <link rel="stylesheet" href="//at.alicdn.com/t/font_2143783_iq6z4ey5vu.css">
+  <!-- 使用iconfont -->
+  <i class="iconfont icon-kefu"></i>
 ```
-- 字体图标使用font-class引用，具体可参照[帮助中心](https://www.iconfont.cn/help/detail?spm=a313x.help_detail.i1.d8d11a391.5b5c3a811LkT4P&helptype=code)
+- 字体图标使用font-class引用，具体可参照[iconfont-帮助中心](https://www.iconfont.cn/help/detail?spm=a313x.help_detail.i1.d8d11a391.5b5c3a811LkT4P&helptype=code)
 
-# 一级导航渲染
+## 一级导航渲染
 
-![image.png](/note/note2-1.png)
+<ImageView :imgArr="imgArr" :index="1" />
 
 **实现步骤**
 
 1. 封装接口函数
 2. 调用接口函数
-3. v-for渲染模版
+3. `v-for`渲染模版
 
-**代码落地**
+**示例代码**
 ```javascript
-
+// /apis/layout.js
 import httpInstance from '@/utils/http'
 
+// 获取一级导航数据
 export function getCategoryAPI () {
   return httpInstance({
     url: '/home/category/head'
@@ -492,12 +246,15 @@ export function getCategoryAPI () {
 ```
 ```vue
 <script setup>
+  // 导入接口函数
   import { getCategoryAPI } from '@/apis/layout'
   import { onMounted, ref } from 'vue'
-
   const categoryList = ref([])
+  // 获取一级导航数据
   const getCategory = async () => {
+    // 1.调用接口函数
     const res = await getCategoryAPI()
+    // 2.保存数据
     categoryList.value = res.result
   }
 
@@ -512,7 +269,9 @@ export function getCategoryAPI () {
         <RouterLink to="/">小兔鲜</RouterLink>
       </h1>
       <ul class="app-header-nav">
+        <!-- 循环遍历一级导航数据 -->
         <li class="home" v-for="item in categoryList" :key="item.id">
+          <!-- 跳转路由 -->
           <RouterLink to="/">{{ item.name }}</RouterLink>
         </li>
       </ul>
@@ -525,9 +284,11 @@ export function getCategoryAPI () {
   </header>
 </template>
 ```
-# 吸顶导航交互实现
-## 1. 准备组件静态结构
+## 吸顶导航交互实现
+> 网站吸顶导航是一种网页设计技术，指的是当用户向下滚动页面时，页面顶部的导航栏会固定在屏幕的顶部，不会随着页面的滚动而消失。
+### 1. 准备吸顶导航组件
 ```vue
+<!-- Layout/components/LayoutFixed.vue -->
 <script setup>
 
 </script>
@@ -557,7 +318,6 @@ export function getCategoryAPI () {
   </div>
 </template>
 
-
 <style scoped lang='scss'>
 .app-header-sticky {
   width: 100%;
@@ -579,77 +339,15 @@ export function getCategoryAPI () {
     transform: none;
     opacity: 1;
   }
-
-  .container {
-    display: flex;
-    align-items: center;
-  }
-
-  .logo {
-    width: 200px;
-    height: 80px;
-    background: url("@/assets/images/logo.png") no-repeat right 2px;
-    background-size: 160px auto;
-  }
-
-  .right {
-    width: 220px;
-    display: flex;
-    text-align: center;
-    padding-left: 40px;
-    border-left: 2px solid $xtxColor;
-
-    a {
-      width: 38px;
-      margin-right: 40px;
-      font-size: 16px;
-      line-height: 1;
-
-      &:hover {
-        color: $xtxColor;
-      }
-    }
-  }
+  ...
 }
 
-.app-header-nav {
-  width: 820px;
-  display: flex;
-  padding-left: 40px;
-  position: relative;
-  z-index: 998;
+...
 
-  li {
-    margin-right: 40px;
-    width: 38px;
-    text-align: center;
-
-    a {
-      font-size: 16px;
-      line-height: 32px;
-      height: 32px;
-      display: inline-block;
-
-      &:hover {
-        color: $xtxColor;
-        border-bottom: 1px solid $xtxColor;
-      }
-    }
-
-    .active {
-      color: $xtxColor;
-      border-bottom: 1px solid $xtxColor;
-    }
-  }
-}
 </style>
 ```
 
-## 2. 渲染基础数据
-
-省略
-
-## 3. 实现吸顶交互
+### 2. 实现吸顶交互
 > 核心逻辑：根据滚动距离判断当前show类名是否显示，大于78显示，小于78，不显示
 
 - 安装 [vueuse](https://vueuse.org/) 包
@@ -661,7 +359,6 @@ export function getCategoryAPI () {
 
 ```vue
 <script setup>
-import LayoutHeaderUl from './LayoutHeaderUl.vue'
 // vueUse
 import { useScroll } from '@vueuse/core'
 const { y } = useScroll(window)
@@ -673,7 +370,7 @@ const { y } = useScroll(window)
   </div>
 </template>
 ```
-# Pinia优化重复请求
+## Pinia优化重复请求
 
 > 普通导航和吸顶导航会分别调用导航分类接口，会在同一页面重复请求两次
 
@@ -682,6 +379,7 @@ const { y } = useScroll(window)
 - 使用store进行导航列表的数据管理
 
 ```javascript
+// /stores/category.js
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { getCategoryAPI } from '@/apis/layout'

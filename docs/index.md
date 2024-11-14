@@ -11,7 +11,7 @@ hero:
       link: /note1
     - theme: alt
       text: 项目源码
-      link: /
+      link: https://gitee.com/gfh_he/rabbit-shop.git
   image:
     src: /image.png
     alt: 小兔鲜儿

@@ -1,11 +1,22 @@
 ---
 outline: [1, 3]
 ---
-# 整体认识和路由配置
-## 1. 准备组件模版
+<script setup>
+import ImageView from './components/ImageView.vue'
+import { ref } from 'vue'
+
+const imgArr = ref(['note6-1.png', 'note6-2.png', 'note6-3.png', 'note6-4.png'])
+
+</script>
+# 商品详情
+
+## 整体认识和页面渲染
+
+<ImageView :imgArr="imgArr" :index="0" />
+
+### 1. 准备组件模版
 ```vue
 <script setup>
-
 
 </script>
 
@@ -120,248 +131,11 @@ outline: [1, 3]
   </div>
 </template>
 
-
 <style scoped lang='scss'>
-.xtx-goods-page {
-  .goods-info {
-    min-height: 600px;
-    background: #fff;
-    display: flex;
-
-    .media {
-      width: 580px;
-      height: 600px;
-      padding: 30px 50px;
-    }
-
-    .spec {
-      flex: 1;
-      padding: 30px 30px 30px 0;
-    }
-  }
-
-  .goods-footer {
-    display: flex;
-    margin-top: 20px;
-
-    .goods-article {
-      width: 940px;
-      margin-right: 20px;
-    }
-
-    .goods-aside {
-      width: 280px;
-      min-height: 1000px;
-    }
-  }
-
-  .goods-tabs {
-    min-height: 600px;
-    background: #fff;
-  }
-
-  .goods-warn {
-    min-height: 600px;
-    background: #fff;
-    margin-top: 20px;
-  }
-
-  .number-box {
-    display: flex;
-    align-items: center;
-
-    .label {
-      width: 60px;
-      color: #999;
-      padding-left: 10px;
-    }
-  }
-
-  .g-name {
-    font-size: 22px;
-  }
-
-  .g-desc {
-    color: #999;
-    margin-top: 10px;
-  }
-
-  .g-price {
-    margin-top: 10px;
-
-    span {
-      &::before {
-        content: "¥";
-        font-size: 14px;
-      }
-
-      &:first-child {
-        color: $priceColor;
-        margin-right: 10px;
-        font-size: 22px;
-      }
-
-      &:last-child {
-        color: #999;
-        text-decoration: line-through;
-        font-size: 16px;
-      }
-    }
-  }
-
-  .g-service {
-    background: #f5f5f5;
-    width: 500px;
-    padding: 20px 10px 0 10px;
-    margin-top: 10px;
-
-    dl {
-      padding-bottom: 20px;
-      display: flex;
-      align-items: center;
-
-      dt {
-        width: 50px;
-        color: #999;
-      }
-
-      dd {
-        color: #666;
-
-        &:last-child {
-          span {
-            margin-right: 10px;
-
-            &::before {
-              content: "•";
-              color: $xtxColor;
-              margin-right: 2px;
-            }
-          }
-
-          a {
-            color: $xtxColor;
-          }
-        }
-      }
-    }
-  }
-
-  .goods-sales {
-    display: flex;
-    width: 400px;
-    align-items: center;
-    text-align: center;
-    height: 140px;
-
-    li {
-      flex: 1;
-      position: relative;
-
-      ~li::after {
-        position: absolute;
-        top: 10px;
-        left: 0;
-        height: 60px;
-        border-left: 1px solid #e4e4e4;
-        content: "";
-      }
-
-      p {
-        &:first-child {
-          color: #999;
-        }
-
-        &:nth-child(2) {
-          color: $priceColor;
-          margin-top: 10px;
-        }
-
-        &:last-child {
-          color: #666;
-          margin-top: 10px;
-
-          i {
-            color: $xtxColor;
-            font-size: 14px;
-            margin-right: 2px;
-          }
-
-          &:hover {
-            color: $xtxColor;
-            cursor: pointer;
-          }
-        }
-      }
-    }
-  }
-}
-
-.goods-tabs {
-  min-height: 600px;
-  background: #fff;
-
-  nav {
-    height: 70px;
-    line-height: 70px;
-    display: flex;
-    border-bottom: 1px solid #f5f5f5;
-
-    a {
-      padding: 0 40px;
-      font-size: 18px;
-      position: relative;
-
-      >span {
-        color: $priceColor;
-        font-size: 16px;
-        margin-left: 10px;
-      }
-    }
-  }
-}
-
-.goods-detail {
-  padding: 40px;
-
-  .attrs {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 30px;
-
-    li {
-      display: flex;
-      margin-bottom: 10px;
-      width: 50%;
-
-      .dt {
-        width: 100px;
-        color: #999;
-      }
-
-      .dd {
-        flex: 1;
-        color: #666;
-      }
-    }
-  }
-
-  >img {
-    width: 100%;
-  }
-}
-
-.btn {
-  margin-top: 20px;
-
-}
-
-.bread-container {
-  padding: 25px 0;
-}
+...
 </style>
 ```
-## 2. 配置路由
+### 2. 配置路由
 ```javascript
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -372,27 +146,11 @@ const router = createRouter({
       component: Layout,
       children: [
         {
-          path: '',
-          component: Home
-        },
-        {
-          path: 'category/:id',
-          component: Category
-        },
-        {
-          path: 'category/sub/:id',
-          component: SubCategory
-        },
-        {
           path: 'detail/:id',
           component: Detail
         }
       ]
     },
-    {
-      path: '/login',
-      component: Login
-    }
   ],
   // 路由滚动行为定制
   scrollBehavior () {
@@ -402,7 +160,7 @@ const router = createRouter({
   }
 })
 ```
-## 3. 绑定模版测试跳转
+### 3. 绑定模版测试跳转
 ```html
 <RouterLink :to="`/detail/${item.id}`">
   <img :src="item.picture" alt="" />
@@ -410,11 +168,10 @@ const router = createRouter({
   <p class="price">&yen;{{ item.price }}</p>
 </RouterLink>
 ```
-# 渲染基础数据
-## 1. 封装接口
+## 渲染基础数据
+### 1. 封装接口
 ```javascript
 import request from '@/utils/http'
-
 
 export const getDetail = (id) => {
   return request({
@@ -426,7 +183,9 @@ export const getDetail = (id) => {
 }
 ```
 
-## 2. 获取数据渲染模版
+### 2. 获取数据渲染模版
+
+
 ```vue
 <script setup>
 import { getDetail } from '@/apis/detail'
@@ -560,85 +319,38 @@ onMounted(() => getGoods())
 </template>
 ```
 
+⚠️ `goods`一开始`{}`：  `{}.categories` -> `undefined`  -> `undefined[1]`
 
-# 热榜区域
-## 1. 渲染基础热榜数据
-1- 准备模版
+解决方法：
+
+- 使用可选链`?.`
+
+> 可选链会在访问属性之前，检查该属性是否存在。如果 `goods.categories` 为 null 或 undefined，那么整个表达式会返回 undefined，而不会抛出错误。
+
 ```vue
-<script setup>
+<el-breadcrumb-item :to="{ path: `/category/${goods.categories?.[1].id}` }">
+  {{ goods.categories?.[1].name }}
+</el-breadcrumb-item>
+```
+- 使用 `v-if` 判断
 
-</script>
-
-
-<template>
-  <div class="goods-hot">
-    <h3>周日榜单</h3>
-    <!-- 商品区块 -->
-    <RouterLink to="/" class="goods-item" v-for="item in 3" :key="item.id">
-      <img :src="item.picture" alt="" />
-      <p class="name ellipsis">一双男鞋</p>
-      <p class="desc ellipsis">一双好穿的男鞋</p>
-      <p class="price">&yen;200.00</p>
-    </RouterLink>
-  </div>
-</template>
-
-
-<style scoped lang="scss">
-.goods-hot {
-  h3 {
-    height: 70px;
-    background: $helpColor;
-    color: #fff;
-    font-size: 18px;
-    line-height: 70px;
-    padding-left: 25px;
-    margin-bottom: 10px;
-    font-weight: normal;
-  }
-
-  .goods-item {
-    display: block;
-    padding: 20px 30px;
-    text-align: center;
-    background: #fff;
-
-    img {
-      width: 160px;
-      height: 160px;
-    }
-
-    p {
-      padding-top: 10px;
-    }
-
-    .name {
-      font-size: 16px;
-    }
-
-    .desc {
-      color: #999;
-      height: 29px;
-    }
-
-    .price {
-      color: $priceColor;
-      font-size: 20px;
-    }
-  }
-}
-</style>
+```vue
+<!-- 在外层使用v-if判断，避免报错 -->
+<div class="container" v-if="goods.details"></div>
 ```
 
-2- 封装接口
+## 热榜区域
+### 1. 渲染基础热榜数据
+
+1- 封装接口
 ```javascript
 /**
  * 获取热榜商品
  * @param {Number} id - 商品id
  * @param {Number} type - 1代表24小时热销榜 2代表周热销榜
- * @param {Number} limit - 获取个数
+ * @param {Number} limit - 获取个数，默认为3
  */
-export const fetchHotGoodsAPI = ({ id, type, limit = 3 }) => {
+export const getHotGoodsAPI = ({ id, type, limit = 3 }) => {
   return request({
     url:'/goods/hot',
     params:{
@@ -650,7 +362,7 @@ export const fetchHotGoodsAPI = ({ id, type, limit = 3 }) => {
 }
 ```
 
-3- 获取基础数据渲染模版
+2- 获取基础数据渲染模版
 ```vue
 <script setup>
 import { ref } from 'vue'
@@ -668,10 +380,7 @@ const getHotList = async () => {
 }
 getHotList()
 
-
 </script>
-
-
 
 <template>
   <div class="goods-hot">
@@ -686,19 +395,19 @@ getHotList()
   </div>
 </template>
 ```
-## 2. 适配热榜类型
+### 2. 适配热榜类型
 1- 设计props参数type
 ```jsx
 // type适配不同类型热榜数据
 const props = defineProps({
+  // 1代表24小时热销榜 2代表周热销榜 3代表总热销榜
   type: {
-    type: Number, // 1代表24小时热销榜 2代表周热销榜 3代表总热销榜 可以使用type去适配title和数据列表
+    type: Number,
     default: 1
   }
 })
 
-
- const res = await fetchHotGoodsAPI({
+ const res = await getHotGoodsAPI({
     id: route.params.id,
     type: props.type
 })
@@ -710,19 +419,27 @@ const props = defineProps({
 <!-- 周热榜 -->
 <GoodHot :type="2" />
 ```
-## 3. 适配热榜title
+扩展：
+- 当你需要确保传递的是一个特定类型的值（如数字、布尔值等），或者传递的是一个变量或计算属性的结果时，应该使用 `:propName="value"`。
+- 如果你只是想传递一个静态的字符串值，那么可以直接使用 `propName="value"`。
+
+### 3. 适配热榜title
 ```jsx
 const TITLEMAP = {
   1: '24小时热榜',
   2: '周热榜', 
 }
+// 使用type去适配title和数据列表
 const title = computed(() => TITLEMAP[props.type])
 
 <h3>{{ title }}</h3>
 ```
 
-# 图片预览组件封装
-## 1. 小图切换大图显示
+## 图片预览组件封装
+
+<ImageView :imgArr="imgArr" :index="1" />
+
+### 1. 小图切换大图显示
 1- 准备模版
 ```vue
 <script setup>
@@ -735,7 +452,6 @@ const imageList = [
   "https://yanxuan-item.nosdn.127.net/f881cfe7de9a576aaeea6ee0d1d24823.jpg"
 ]
 </script>
-
 
 <template>
   <div class="goods-image">
@@ -823,22 +539,25 @@ const imageList = [
 <script setup>
 import { ref } from 'vue'
 
-// 实现鼠标移入交互
+// 定义当前鼠标悬停的图片索引
 const curIndex = ref(0)
+
+/**
+ * 当鼠标移入小图时调用此函数更新悬停的图片索引
+ * @param {number} i - 被悬停的小图索引
+ */
 const mouseEnterFn = (i) => curIndex.value = i
-
-
 
 </script>
 
-
 <template>
   <div class="goods-image">
-    <!-- 小图列表 -->
+    <!-- 显示商品的小图列表 -->
     <ul class="small">
+      <!-- 遍历每个小图，当鼠标移入时更新curIndex，并根据curIndex应用active类 -->
       <li v-for="(img, i) in imageList" 
         :key="i" 
-        @mouseenter="mouseEnterFn(i)" 
+        @mouseenter="mouseEnterFn(i)"
         :class="{ active: i === curIndex }">
         <img :src="img" alt="" />
       </li>
@@ -846,7 +565,13 @@ const mouseEnterFn = (i) => curIndex.value = i
   </div>
 </template>
 ```
-## 2. 放大镜效果实现
+- `mouseenter`：鼠标进入事件
+- `:class="{ active: 布尔值 }"`：动态类名
+
+### 2. 放大镜效果实现
+
+<ImageView :imgArr="imgArr" :index="3" />
+
 ```vue
 <script setup>
 import { ref, watch } from 'vue'
@@ -905,9 +630,7 @@ watch([elementX, elementY, isOutside], () => {
   positionY.value = -top.value * 2
 
 })
-
 </script>
-
 
 <template>
   <div class="goods-image">
@@ -992,10 +715,14 @@ watch([elementX, elementY, isOutside], () => {
 </style>
 ```
 
-# SKU组件熟悉
+## SKU组件熟悉
 
-# 全局组件统一插件化
-## 1. 插件化开发
+> 在电商网站中，SKU（Stock Keeping Unit，库存单位）组件通常指的是用于展示和管理商品的不同规格（如尺寸、颜色、款式等）的界面组件。
+
+<ImageView :imgArr="imgArr" :index="2" />
+
+## 全局组件统一插件化
+### 1. 插件化开发
 ```javascript
 // 把components中的所组件都进行全局化注册
 // 通过插件的方式
@@ -1009,11 +736,11 @@ export const componentPlugin = {
   }
 }
 ```
-## 2. 插件注册
-```vue
-
+### 2. 插件注册
+```javascript
 // 引入全局组件插件
 import { componentPlugin } from '@/components'
 
+// 全局注册
 app.use(componentPlugin)
 ```

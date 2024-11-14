@@ -1,9 +1,20 @@
 ---
 outline: [1, 3]
 ---
-# 基础数据渲染
-![image.png](/note/note10-1.png)
-## 1. 准备接口
+<script setup>
+import ImageView from './components/ImageView.vue'
+import { ref } from 'vue'
+
+const imgArr = ref(['note10-1.png', 'note10-2.png', 'note10-3.png', 'note10-4.png'])
+
+</script>
+
+# 支付页
+
+## 整体认识和页面渲染
+<ImageView :imgArr="imgArr" :index="0" />
+
+### 1. 准备接口
 ```javascript
 import request from '@/utils/http'
 
@@ -13,7 +24,7 @@ export const getOrderAPI = (id) => {
   })
 }
 ```
-## 2. 获取数据渲染内容
+### 2. 获取数据渲染内容
 ```vue
 <script setup>
 import { getOrderAPI } from '@/apis/pay'
@@ -67,24 +78,38 @@ onMounted(() => getPayInfo())
   </div>
 </template>
 ```
-# 支付功能实现
-## 1. 支付携带参数
+## 支付功能实现
+
+<ImageView :imgArr="imgArr" :index="1" />
+
+### 1. 支付前端配置
 ```javascript
-// 支付地址
+// 定义基础URL，用于拼接后续的支付请求URL
 const baseURL = 'http://pcapi-xiaotuxian-front-devtest.itheima.net/'
+
+// 定义后台回调地址，用于支付成功后重定向到的页面
 const backURL = 'http://127.0.0.1:5173/paycallback'
+
+// 对后台回调地址进行URL编码，以确保地址中的特殊字符不会导致请求错误
 const redirectUrl = encodeURIComponent(backURL)
+
+// 拼接支付请求的完整URL，包含订单ID和重定向地址作为查询参数
 const payUrl = `${baseURL}pay/aliPay?orderId=${route.query.id}&redirect=${redirectUrl}`
 ```
 
-## 2. 支付宝沙箱账号信息
+### 2. 支付宝沙箱账号
+
+> 支付宝沙箱环境是一个专门为开发者提供的测试平台，用于模拟支付宝的真实生产环境。
+
 | 账号 | [jfjbwb4477@sandbox.com](mailto:jfjbwb4477@sandbox.com) |
 | --- | --- |
 | 登录密码 | 111111 |
 | 支付密码 | 111111 |
 
-# 支付结果页展示
-## 1. 准备模版
+## 支付结果页展示
+<ImageView :imgArr="imgArr" :index="2" />
+
+### 1. 准备模版
 ```vue
 <script setup>
 
@@ -116,58 +141,18 @@ const payUrl = `${baseURL}pay/aliPay?orderId=${route.query.id}&redirect=${redire
 </template>
 
 <style scoped lang="scss">
-.pay-result {
-  padding: 100px 0;
-  background: #fff;
-  text-align: center;
-  margin-top: 20px;
-
-  >.iconfont {
-    font-size: 100px;
-  }
-
-  .green {
-    color: #1dc779;
-  }
-
-  .red {
-    color: $priceColor;
-  }
-
-  .tit {
-    font-size: 24px;
-  }
-
-  .tip {
-    color: #999;
-  }
-
-  p {
-    line-height: 40px;
-    font-size: 16px;
-  }
-
-  .btn {
-    margin-top: 50px;
-  }
-
-  .alert {
-    font-size: 12px;
-    color: #999;
-    margin-top: 50px;
-  }
-}
+...
 </style>
 ```
 
-## 2. 绑定路由
+### 2. 绑定路由
 ```javascript
 {
   path: 'paycallback', // 注意路径，必须是paycallback
   component: PayBack
 },
 ```
-## 3. 渲染数据
+### 3. 渲染数据
 ```vue
 <script setup>
 import { getOrderAPI } from '@/apis/pay'
@@ -212,7 +197,7 @@ onMounted(() => getOrderInfo())
 </template>
 ```
 
-# 倒计时逻辑函数封装
+## 订单支付倒计时封装
 ```javascript
 // 封装倒计时逻辑函数
 import { computed, onUnmounted, ref } from 'vue'

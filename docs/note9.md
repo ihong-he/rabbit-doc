@@ -1,8 +1,22 @@
 ---
 outline: [1, 3]
 ---
-# 路由配置和基础数据渲染
-## 1. 准备组件模版
+
+<script setup>
+import ImageView from './components/ImageView.vue'
+import { ref } from 'vue'
+
+const imgArr = ref(['note9-1.png', 'note9-2.png', 'note9-3.png', 'note9-4.png'])
+
+</script>
+
+#  订单页
+
+## 整体认识和页面渲染
+
+<ImageView :imgArr="imgArr" :index="0" />
+
+### 1. 准备组件模版
 ```vue
 <script setup>
 const checkInfo = {}  // 订单对象
@@ -112,243 +126,81 @@ const curAddress = {}  // 地址对象
 </template>
 
 <style scoped lang="scss">
-.xtx-pay-checkout-page {
-  margin-top: 20px;
-
-  .wrapper {
-    background: #fff;
-    padding: 0 20px;
-
-    .box-title {
-      font-size: 16px;
-      font-weight: normal;
-      padding-left: 10px;
-      line-height: 70px;
-      border-bottom: 1px solid #f5f5f5;
-    }
-
-    .box-body {
-      padding: 20px 0;
-    }
-  }
-}
-
-.address {
-  border: 1px solid #f5f5f5;
-  display: flex;
-  align-items: center;
-
-  .text {
-    flex: 1;
-    min-height: 90px;
-    display: flex;
-    align-items: center;
-
-    .none {
-      line-height: 90px;
-      color: #999;
-      text-align: center;
-      width: 100%;
-    }
-
-    >ul {
-      flex: 1;
-      padding: 20px;
-
-      li {
-        line-height: 30px;
-
-        span {
-          color: #999;
-          margin-right: 5px;
-
-          >i {
-            width: 0.5em;
-            display: inline-block;
-          }
-        }
-      }
-    }
-
-    >a {
-      color: $xtxColor;
-      width: 160px;
-      text-align: center;
-      height: 90px;
-      line-height: 90px;
-      border-right: 1px solid #f5f5f5;
-    }
-  }
-
-  .action {
-    width: 420px;
-    text-align: center;
-
-    .btn {
-      width: 140px;
-      height: 46px;
-      line-height: 44px;
-      font-size: 14px;
-
-      &:first-child {
-        margin-right: 10px;
-      }
-    }
-  }
-}
-
-.goods {
-  width: 100%;
-  border-collapse: collapse;
-  border-spacing: 0;
-
-  .info {
-    display: flex;
-    text-align: left;
-
-    img {
-      width: 70px;
-      height: 70px;
-      margin-right: 20px;
-    }
-
-    .right {
-      line-height: 24px;
-
-      p {
-        &:last-child {
-          color: #999;
-        }
-      }
-    }
-  }
-
-  tr {
-    th {
-      background: #f5f5f5;
-      font-weight: normal;
-    }
-
-    td,
-    th {
-      text-align: center;
-      padding: 20px;
-      border-bottom: 1px solid #f5f5f5;
-
-      &:first-child {
-        border-left: 1px solid #f5f5f5;
-      }
-
-      &:last-child {
-        border-right: 1px solid #f5f5f5;
-      }
-    }
-  }
-}
-
-.my-btn {
-  width: 228px;
-  height: 50px;
-  border: 1px solid #e4e4e4;
-  text-align: center;
-  line-height: 48px;
-  margin-right: 25px;
-  color: #666666;
-  display: inline-block;
-
-  &.active,
-  &:hover {
-    border-color: $xtxColor;
-  }
-}
-
-.total {
-  dl {
-    display: flex;
-    justify-content: flex-end;
-    line-height: 50px;
-
-    dt {
-      i {
-        display: inline-block;
-        width: 2em;
-      }
-    }
-
-    dd {
-      width: 240px;
-      text-align: right;
-      padding-right: 70px;
-
-      &.price {
-        font-size: 20px;
-        color: $priceColor;
-      }
-    }
-  }
-}
-
-.submit {
-  text-align: right;
-  padding: 60px;
-  border-top: 1px solid #f5f5f5;
-}
-
-.addressWrapper {
-  max-height: 500px;
-  overflow-y: auto;
-}
-
-.text {
-  flex: 1;
-  min-height: 90px;
-  display: flex;
-  align-items: center;
-
-  &.item {
-    border: 1px solid #f5f5f5;
-    margin-bottom: 10px;
-    cursor: pointer;
-
-    &.active,
-    &:hover {
-      border-color: $xtxColor;
-      background: lighten($xtxColor, 50%);
-    }
-
-    >ul {
-      padding: 10px;
-      font-size: 14px;
-      line-height: 30px;
-    }
-  }
-}
+...
 </style>
-```
-## 2. 配置路由
-## 3. 封装接口
+
+````
+### 2. 配置路由
+
 ```javascript
-import request from '@/utils/request'
+import Checkout from '@/views/Checkout/index.vue'
+...
+routes: [
+  {
+    path: '/checkout',
+    component: Checkout
+  }
+]
+````
+
+### 3. 封装接口
+
+```javascript
+import request from "@/utils/request";
 /**
  * 获取结算信息
  */
 export const getCheckoutInfoAPI = () => {
   return request({
-    url:'/member/order/pre'
-  })
-}
+    url: "/member/order/pre",
+  });
+};
 ```
-## 4. 渲染数据
-# 切换地址-打开弹框交互
-## 1. 准备弹框模版
+
+### 4. 渲染数据
+
+```vue
+<script setup>
+import { onMounted, ref } from "vue";
+import { getOrderInfoAPI } from "@/apis/checkout";
+
+const checkInfo = ref({}); // 订单对象
+const curAddress = ref({}); // 地址对象
+
+// 获取订单信息
+const getOrderInfo = () => {
+  getOrderInfoAPI().then((res) => {
+    checkInfo.value = res.result;
+    // 获取默认地址
+    curAddress.value = checkInfo.value.userAddresses.filter(
+      (item) => item.isDefault === 0
+    )[0];
+  });
+};
+
+// 初始化数据
+onMounted(() => getOrderInfo());
+</script>
+```
+
+## 切换地址-打开弹框交互
+
+### 1. 准备弹框模版
+
 ```html
 <el-dialog title="切换收货地址" width="30%" center>
   <div class="addressWrapper">
-    <div class="text item" v-for="item in checkInfo.userAddresses"  :key="item.id">
+    <div
+      class="text item"
+      v-for="item in checkInfo.userAddresses"
+      :key="item.id"
+    >
       <ul>
-      <li><span>收<i />货<i />人：</span>{{ item.receiver }} </li>
-      <li><span>联系方式：</span>{{ item.contact }}</li>
-      <li><span>收货地址：</span>{{ item.fullLocation + item.address }}</li>
+        <li>
+          <span>收<i />货<i />人：</span>{{ item.receiver }}
+        </li>
+        <li><span>联系方式：</span>{{ item.contact }}</li>
+        <li><span>收货地址：</span>{{ item.fullLocation + item.address }}</li>
       </ul>
     </div>
   </div>
@@ -360,44 +212,55 @@ export const getCheckoutInfoAPI = () => {
   </template>
 </el-dialog>
 ```
-## 2. 控制弹框打开
+
+### 2. 控制弹框打开
+
 ```vue
-const showDialog = ref(false)
+<script setup>
+const showDialog = ref(false);
+</script>
+<template>
+  <el-button size="large" @click="showDialog = true">切换地址</el-button>
 
-<el-button size="large" @click="showDialog = true">切换地址</el-button>
-
-<el-dialog v-model="showDialog" title="切换收货地址" width="30%" center>
-    <!-- 省略 -->
-</el-dialog>
+  <el-dialog v-model="showDialog" title="切换收货地址" width="30%" center>
+    ...
+  </el-dialog>
+</template>
 ```
-# 切换地址-地址切换交互
-> 基础思想：记录当前点击项，通过动态class判断当前div是否有激活类名
+
+## 切换地址-地址切换交互
+
+> 基础思想：记录当前点击项，通过动态 class 判断当前 div 是否有激活类名
 
 ```vue
 <script setup>
 // 切换地址
-const activeAddress = ref({})
+const activeAddress = ref({});
 const switchAddress = (item) => {
-  activeAddress.value = item
-}
+  activeAddress.value = item;
+};
 </script>
 
 <template>
-<div class="text item" 
-  :class="{ active: activeAddress.id === item.id }" 
-  @click="switchAddress(item)"
-  :key="item.id">
-  <!-- 省略... -->
-</div>
+  <div
+    class="text item"
+    :class="{ active: activeAddress.id === item.id }"
+    @click="switchAddress(item)"
+    :key="item.id"
+  >
+    <!-- 省略... -->
+  </div>
 </template>
 ```
-# 创建订单生成订单ID
-## 1. 准备支付页组件并绑定路由
+
+## 创建订单生成订单 ID
+
+### 1. 准备支付页组件并绑定路由
+
 ```vue
 <script setup>
-const payInfo = {}
+const payInfo = {};
 </script>
-
 
 <template>
   <div class="xtx-pay-page">
@@ -436,113 +299,28 @@ const payInfo = {}
 </template>
 
 <style scoped lang="scss">
-.xtx-pay-page {
-  margin-top: 20px;
-}
-
-.pay-info {
-
-  background: #fff;
-  display: flex;
-  align-items: center;
-  height: 240px;
-  padding: 0 80px;
-
-  .icon {
-    font-size: 80px;
-    color: #1dc779;
-  }
-
-  .tip {
-    padding-left: 10px;
-    flex: 1;
-
-    p {
-      &:first-child {
-        font-size: 20px;
-        margin-bottom: 5px;
-      }
-
-      &:last-child {
-        color: #999;
-        font-size: 16px;
-      }
-    }
-  }
-
-  .amount {
-    span {
-      &:first-child {
-        font-size: 16px;
-        color: #999;
-      }
-
-      &:last-child {
-        color: $priceColor;
-        font-size: 20px;
-      }
-    }
-  }
-}
-
-.pay-type {
-  margin-top: 20px;
-  background-color: #fff;
-  padding-bottom: 70px;
-
-  p {
-    line-height: 70px;
-    height: 70px;
-    padding-left: 30px;
-    font-size: 16px;
-
-    &.head {
-      border-bottom: 1px solid #f5f5f5;
-    }
-  }
-
-  .btn {
-    width: 150px;
-    height: 50px;
-    border: 1px solid #e4e4e4;
-    text-align: center;
-    line-height: 48px;
-    margin-left: 30px;
-    color: #666666;
-    display: inline-block;
-
-    &.active,
-    &:hover {
-      border-color: $xtxColor;
-    }
-
-    &.alipay {
-      background: url(https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/7b6b02396368c9314528c0bbd85a2e06.png) no-repeat center / contain;
-    }
-
-    &.wx {
-      background: url(https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/c66f98cff8649bd5ba722c2e8067c6ca.jpg) no-repeat center / contain;
-    }
-  }
-}
+...
 </style>
 ```
-## 2. 准备生成订单接口
-```javascript
 
+### 2. 准备生成订单接口
+
+```javascript
 // 创建订单
 export const createOrderAPI = (data) => {
   return request({
-    url: '/member/order',
-    method: 'POST',
-    data
-  })
-}
+    url: "/member/order",
+    method: "POST",
+    data,
+  });
+};
 ```
-## 3. 调用接口携带id跳转路由
+
+### 3. 调用接口携带 id 跳转路由
+
 ```vue
 <script setup>
-import { createOrderAPI } from '@/apis/checkout'
+import { createOrderAPI } from "@/apis/checkout";
 
 // 创建订单
 const createOrder = async () => {
@@ -550,32 +328,31 @@ const createOrder = async () => {
     deliveryTimeType: 1,
     payType: 1,
     payChannel: 1,
-    buyerMessage: '',
-    goods: checkInfo.value.goods.map(item => {
+    buyerMessage: "",
+    goods: checkInfo.value.goods.map((item) => {
       return {
         skuId: item.skuId,
-        count: item.count
-      }
+        count: item.count,
+      };
     }),
-    addressId: curAddress.value.id
-  })
-  const orderId = res.result.id
+    addressId: curAddress.value.id,
+  });
+  const orderId = res.result.id;
   router.push({
-    path: '/pay',
+    path: "/pay",
     query: {
-      id: orderId
-    }
-  })
-}
-
+      id: orderId,
+    },
+  });
+};
 </script>
 
 <template>
-    <!-- 提交订单 -->
-    <div class="submit">
-      <el-button @click="createOrder" type="primary" size="large">提交订单</el-button>
-    </div>
+  <!-- 提交订单 -->
+  <div class="submit">
+    <el-button @click="createOrder" type="primary" size="large"
+      >提交订单</el-button
+    >
+  </div>
 </template>
 ```
-
-

@@ -1,7 +1,22 @@
 ---
 outline: [1, 3]
 ---
+<script setup>
+import ImageView from './components/ImageView.vue'
+import { ref } from 'vue'
+
+const imgArr = ref(['note1-1.png', 'note1-2.png', 'note1-3.png', 'note1-4.png', 'note1-5.png'])
+
+</script>
 # 项目起步
+
+## 项目介绍
+
+> 小兔鲜儿电商项目网页端前台
+
+<ImageView :imgArr="imgArr" :index="0" />
+<ImageView :imgArr="imgArr" :index="1" />
+<ImageView :imgArr="imgArr" :index="2" />
 
 ## 创建项目并整理目录
 
@@ -9,12 +24,13 @@ outline: [1, 3]
 npm init vue@latest
 ```
 
-![image.png](/note/note1-1.png)
+<ImageView :imgArr="imgArr" :index="3" />
 
 ## 配置别名路径
 > 配置别名路径可以在写代码时联想提示路径
 
 ```json
+// jsconfig.json
 {
   "compilerOptions" : {
     "baseUrl" : "./",
@@ -24,16 +40,16 @@ npm init vue@latest
   }
 }
 ```
-⚠️ 因`create-vue`版本不同会有差异，新版本可能无需配置
+⚠️ 因`create-vue`版本不同会有差异，新版本可能会主动生成
 ## elementPlus引入
-### 1. 安装elementPlus和自动导入插件
+### 1. 安装elementPlus
 ```bash
 npm install element-plus --save
 npm install -D unplugin-vue-components unplugin-auto-import
 ```
-### 2. 配置自动按需导入
+### 2. 配置按需导入
 ```javascript
-// 引入插件
+// vite.config.js
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
@@ -57,16 +73,23 @@ export default defineConfig({
   <el-button type="primary">i am button</el-button>
 </template>
 ```
-## 定制elementPlus主题
+## 自定义elementPlus主题
+
+> Element Plus 默认提供一套主题，CSS 命名采用 BEM 的风格，方便使用者覆盖样式。如果需要大规模替换样式，可以通过 [SCSS 变量](https://element-plus.org/zh-CN/guide/theming.html) 处理
+
 ### 1. 安装sass
 > 基于vite的项目默认不支持css预处理器，需要开发者单独安装
 
 ```bash
 npm i sass -D
 ```
-### 2. 准备定制化的样式文件
-```javascript
-/* 只需要重写你需要的即可 */
+### 2. 引入scss文件
+
+> theme-chalk 使用SCSS编写而成。你可以在 `packages/theme-chalk/src/common/var.scss` 文件中查找SCSS变量
+
+```scss
+// styles/element/index.scss
+/* 自定义element-plus主题色 */
 @forward 'element-plus/theme-chalk/src/common/var.scss' with (
   $colors: (
     'primary': (
@@ -93,11 +116,10 @@ npm i sass -D
 )
 ```
 ### 3. 自动导入配置
-> 这里自动导入需要深入到elementPlus的组件中，按照官方的配置文档来
-> 1. 自动导入定制化样式文件进行样式覆盖
-> 2. 按需定制主题配置 （需要安装 unplugin-element-plus）
+> 如果你正在使用vite，并且你想在按需导入时自定义主题。使用 scss.additionalData 来编译所有应用 scss 变量的组件。
 
-```javascript
+```javascript{22,36}
+// vite.config.js
 import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
@@ -139,9 +161,11 @@ export default defineConfig({
   }
 })
 ```
-⚠️ 因目前`sass`和`element-plus`有兼容性问题，在控制台会有警告信息
+⚠️ 新版本`sass`和`element-plus`可能会有兼容性问题
 
-## axios安装及封装
+## Axios请求配置
+> Axios 是一个基于 promise 网络请求库，作用于node.js 和浏览器中
+
 ### 1. 安装axios
 ```bash
 npm i axios
@@ -154,10 +178,11 @@ npm i axios
   2. 拦截器 - 请求携带token 及响应401拦截等
 
 ```javascript
+// utils/http.js
 import axios from 'axios'
 
 // 创建axios实例
-const http = axios.create({
+const instance = axios.create({
   baseURL: 'http://pcapi-xiaotuxian-front-devtest.itheima.net',
   timeout: 5000
 })
@@ -173,10 +198,12 @@ instance.interceptors.response.use(res => res.data, e => {
 })
 
 
-export default http
+export default instance
 ```
 ### 3. 封装请求函数
+
 ```javascript
+// /apis/...
 import http from '@/utils/http'
 
 export function getCategoryAPI () {
@@ -186,7 +213,9 @@ export function getCategoryAPI () {
 }
 ```
 ## 路由整体设计
-> 路由设计原则：找页面的切换方式，如果是整体切换，则为一级路由；如果是在一级路由的内部进行的内容切换，则为二级路由
+> 路由设计原则：根据页面的切换方式设计
+- 如果是整体切换，则为一级路由
+- 如果是在一级路由的内部进行的内容切换，则为二级路由
 ```html
 <template>
   我是登录页
@@ -210,11 +239,11 @@ export function getCategoryAPI () {
   我是分类
 </template>
 ```
-
 ```javascript
+// router/index.js
+
 // createRouter：创建router实例对象
 // createWebHistory：创建history模式的路由
-
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/Login/index.vue'
 import Layout from '@/views/Layout/index.vue'
@@ -250,21 +279,21 @@ const router = createRouter({
 
 export default router
 ```
-## 静态资源引入和Error Lens安装
+## 静态资源及VSCode插件
 ### 1. 静态资源引入
 - 图片资源 - 把 images 文件夹放到 assets 目录下
 - 样式资源 - 把 common.scss 文件放到 styles 目录下
 
 ### 2. Error Lens插件安装
-> Error Lens插件会改进错误、警告和其他语言诊断的突出显示。
+> Error Lens插件会自动进行错误、警告和其他语言诊断的突出显示。
 
-![image.png](/note/note1-2.png)
+<ImageView :imgArr="imgArr" :index="4" />
 
 ## scss全局变量自动导入
 
 >在var.scss中定义全局通用的sass颜色变量及其它sass变量
 
-```css
+```scss
 // @/styles/var.scss
 $xtxColor: #27ba9b;
 $helpColor: #e26237;
@@ -272,7 +301,7 @@ $sucColor: #1dc779;
 $warnColor: #ffb302;
 $priceColor: #cf4444;
 ```
-```json
+```json{7}
 css: {
     preprocessorOptions: {
       scss: {
