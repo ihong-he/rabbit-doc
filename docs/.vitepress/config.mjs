@@ -10,7 +10,8 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: '首页', link: '/' },
-      { text: '开发笔记', link: '/note1' }
+      { text: '开发笔记', link: '/note1' },
+      { text: '演示网站', link: 'https://ihong-he.github.io/vue-rabbit/' }
     ],
     logo: '/image.png',
 
