@@ -7,11 +7,11 @@ hero:
   tagline: 采用 Vue3 + Vite 最新技术栈开发，涵盖了首页，分类页，购物车管理，支付管理，会员中心等功能。
   actions:
     - theme: brand
-      text: 开始使用
+      text: 开发指南
       link: /note1
     - theme: alt
-      text: 项目源码
-      link: https://gitee.com/gfh_he/rabbit-shop.git
+      text: 演示网站
+      link: https://ihong-he.github.io/vue-rabbit
   image:
     src: /image.png
     alt: 小兔鲜儿

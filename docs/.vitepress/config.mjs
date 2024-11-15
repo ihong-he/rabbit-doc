@@ -10,8 +10,8 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: '首页', link: '/' },
-      { text: '开发笔记', link: '/note1' },
-      { text: '演示网站', link: 'https://ihong-he.github.io/vue-rabbit/' }
+      { text: '项目笔记', link: '/note1' },
+      { text: '前端笔记', link: 'http://150.158.175.93:8268/doc/' }
     ],
     logo: '/image.png',
 
@@ -41,7 +41,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+      { icon: 'github', link: 'https://github.com/ihong-he/vue-rabbit' }
     ],
     footer: {
       // message: 'Released under the MIT License.',
